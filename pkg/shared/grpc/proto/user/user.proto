@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package com.goarch.grpc.auth;
+option go_package = "github.com/vickydk/goarch/pkg/shared/grpc/pb/user";
+
+service UserCrudHandler {
+  rpc RegisterUser(RegisterRequest) returns (RegisterResponse);
+}
+
+message RegisterRequest {
+  string requestId = 1;
+  string email = 2;
+  string password = 3;
+  string name = 4;
+}
+
+message RegisterResponse {
+  string status = 1;
+  string message = 2;
+  User Data = 3;
+}
+
+message User {
+  string email = 1;
+  string name = 2;
+}
