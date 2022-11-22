@@ -1,27 +1,37 @@
 package user
 
 import (
+	"strings"
+	"time"
+
 	domainUser "goarch/pkg/domain/user"
 	"goarch/pkg/infrastructure/goarch"
+	goarchApi "goarch/pkg/infrastructure/http/goarch"
 	"goarch/pkg/shared/constants"
 	"goarch/pkg/shared/utils"
 	ctxSess "goarch/pkg/shared/utils/context"
-	"strings"
-	"time"
 )
 
 type service struct {
-	userRepo        domainUser.Repository
-	crudUserWrapper goarch.CrudUserWrapper
+	userRepo         domainUser.Repository
+	crudUserWrapper  goarch.CrudUserWrapper
+	goarchApiWrapper goarchApi.Wrapper
 }
 
-func NewService(userRepo domainUser.Repository, crudUserWrapper goarch.CrudUserWrapper) Service {
+func NewService(userRepo domainUser.Repository, crudUserWrapper goarch.CrudUserWrapper, goarchApiWrapper goarchApi.Wrapper) Service {
 	s := &service{
-		userRepo:        userRepo,
-		crudUserWrapper: crudUserWrapper,
+		userRepo:         userRepo,
+		crudUserWrapper:  crudUserWrapper,
+		goarchApiWrapper: goarchApiWrapper,
 	}
 	if s.userRepo == nil {
 		panic("please provide user repo")
+	}
+	if s.crudUserWrapper == nil {
+		panic("please provide user grpc wrapper")
+	}
+	if s.goarchApiWrapper == nil {
+		panic("please provide user API wrapper")
 	}
 	return s
 }
@@ -36,6 +46,38 @@ func (s *service) RegisterUser(ctxSess *ctxSess.Context, req *RegisterRequest) (
 	res = &User{
 		Email: strings.ToLower(out.Email),
 		Name:  out.Name,
+	}
+
+	return
+}
+
+func (s *service) GetUserDetail(ctxSess *ctxSess.Context) (resp User, err error) {
+	out, err := s.goarchApiWrapper.GetUserDetail(ctxSess, ctxSess.UserSession.AccountID)
+	if err != nil {
+		ctxSess.ErrorMessage = err.Error()
+		err = constants.ErrorDataNotFound
+		return
+	}
+
+	resp = User{
+		Email: out.Email,
+		Name:  out.Name,
+	}
+
+	return
+}
+
+func (s *service) GetUserDetailAPI(ctxSess *ctxSess.Context, userID int64) (resp User, err error) {
+	entity, err := s.userRepo.FindById(userID)
+	if err != nil {
+		ctxSess.ErrorMessage = err.Error()
+		err = constants.ErrorDataNotFound
+		return
+	}
+
+	resp = User{
+		Email: entity.Email,
+		Name:  entity.Name,
 	}
 
 	return

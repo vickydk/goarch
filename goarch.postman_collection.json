@@ -86,7 +86,7 @@
 							}
 						},
 						"url": {
-							"raw": "127.0.0.1:8811/api/v1//user",
+							"raw": "127.0.0.1:8811/api/v1/user",
 							"host": [
 								"127",
 								"0",
@@ -97,7 +97,6 @@
 							"path": [
 								"api",
 								"v1",
-								"",
 								"user"
 							]
 						}
@@ -235,8 +234,59 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Get User Detail",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"user@test.com\",\n    \"password\": \"Admin@1234\",\n    \"name\": \"user\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:8811/api/v1/user",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8811",
+							"path": [
+								"api",
+								"v1",
+								"user"
+							]
+						}
+					},
+					"response": []
 				}
 			]
+		}
+	],
+	"variable": [
+		{
+			"key": "token",
+			"value": ""
 		}
 	]
 }

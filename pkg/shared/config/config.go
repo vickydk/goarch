@@ -4,15 +4,17 @@ import (
 	"fmt"
 
 	Database "goarch/pkg/shared/database"
+	"goarch/pkg/shared/rest"
 	RpcClient "goarch/pkg/shared/rpc_client"
 
 	"github.com/spf13/viper"
 )
 
 type Config struct {
-	Apps       Apps                    `json:"apps"`
-	GoarchGrpc GoarchConfig            `json:"goarchGrpc"`
-	Database   Database.ConfigDatabase `json:"database"`
+	Apps            Apps                    `json:"apps"`
+	GoarchGrpc      GoarchConfig            `json:"goarchGrpc"`
+	Database        Database.ConfigDatabase `json:"database"`
+	GoarchAPIConfig GoarchAPIConfig         `json:"goarchAPIConfig"`
 }
 
 type Apps struct {
@@ -24,6 +26,13 @@ type Apps struct {
 
 type GoarchConfig struct {
 	RpcOptions RpcClient.Options `json:"rpcOptions"`
+}
+
+type GoarchAPIConfig struct {
+	RestOptions rest.Options `json:"restOptions"`
+	Path        struct {
+		GetUserDetail string `json:"getUserDetail"`
+	} `json:"path"`
 }
 
 func (c *Config) AppAddress() string {

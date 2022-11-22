@@ -21,5 +21,18 @@
       "address": "127.0.0.1:8822",
       "timeout": 30
     }
+  },
+  "goarchAPIConfig": {
+    "restOptions": {
+      "address": "http://127.0.0.1:8811",
+      "timeout": 30,
+      "debugMode": false,
+      "withProxy": false,
+      "skipTLS": true,
+      "skipCheckRedirect": false
+    },
+    "path": {
+      "getUserDetail": "/api/v1/public/user"
+    }
   }
 }

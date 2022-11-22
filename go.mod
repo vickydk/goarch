@@ -17,14 +17,15 @@ require (
 	github.com/spf13/viper v1.14.0
 	go.uber.org/zap v1.23.0
 	golang.org/x/crypto v0.0.0-20220722155217-630584e8d5aa
+	google.golang.org/grpc v1.51.0
+	google.golang.org/protobuf v1.28.1
+	gopkg.in/resty.v1 v1.12.0
 )
 
 require (
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/hashicorp/go-uuid v1.0.3 // indirect
 	google.golang.org/genproto v0.0.0-20221118155620-16455021b5e6 // indirect
-	google.golang.org/grpc v1.51.0 // indirect
-	google.golang.org/protobuf v1.28.1 // indirect
 )
 
 require (

@@ -1,12 +1,14 @@
 package http
 
 import (
-	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
+	"goarch/pkg/interface/interceptor"
 	"goarch/pkg/shared/config"
 	"goarch/pkg/shared/logger"
 	"goarch/pkg/shared/utils"
 	"goarch/pkg/shared/utils/context"
+
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 func setupMiddleware(server *echo.Echo, cfg *config.Config) {
@@ -34,6 +36,8 @@ func setupMiddleware(server *echo.Echo, cfg *config.Config) {
 			return h(c)
 		}
 	})
+	interceptor := interceptor.New()
+	server.Use(interceptor.ValidateAccess())
 
 	server.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"*"},

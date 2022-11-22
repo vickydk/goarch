@@ -4,6 +4,7 @@ import (
 	"github.com/go-playground/validator"
 	"goarch/pkg/infrastructure/goarch"
 	"goarch/pkg/infrastructure/gorm"
+	goarchApi "goarch/pkg/infrastructure/http/goarch"
 	"goarch/pkg/shared/config"
 	Database "goarch/pkg/shared/database"
 	authSvc "goarch/pkg/usecase/auth"
@@ -28,8 +29,9 @@ func Setup() *Container {
 	userRepo := gorm.UserSetup(db)
 
 	crudUserWrapper := goarch.SetupCrudUserWrapper(&cfg.GoarchGrpc)
+	goArchAPIWrapper := goarchApi.NewWrapper(&cfg.GoarchAPIConfig)
 
-	userSvc := userSvc.NewService(userRepo, crudUserWrapper)
+	userSvc := userSvc.NewService(userRepo, crudUserWrapper, goArchAPIWrapper)
 	authSvc := authSvc.NewService(userRepo)
 
 	return &Container{

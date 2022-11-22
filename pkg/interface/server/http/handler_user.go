@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/go-playground/validator"
 	"github.com/labstack/echo/v4"
@@ -25,6 +26,42 @@ func SetupUserHandler(validate *validator.Validate, service user.Service) *userH
 		panic("service is nil")
 	}
 	return handler
+}
+
+func (s *userHandler) getUserDetailAPI(c echo.Context) error {
+	context := Parse(c)
+	ctxSess := context.CtxSess
+
+	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
+	if err != nil {
+		ctxSess.ErrorMessage = err.Error()
+		ctxSess.Lv4()
+		return httpError(c, http.StatusBadRequest, fmt.Errorf("bind request: %w", err))
+	}
+	resp, err := s.service.GetUserDetailAPI(ctxSess, id)
+	if err != nil {
+		ctxSess.Lv4()
+		httpCode, errMsg := errHandler(err)
+		return httpError(c, httpCode, errors.New(errMsg))
+	}
+
+	ctxSess.Lv4(resp)
+	return c.JSON(http.StatusOK, resp)
+}
+
+func (s *userHandler) getUserDetail(c echo.Context) error {
+	context := Parse(c)
+	ctxSess := context.CtxSess
+
+	resp, err := s.service.GetUserDetail(ctxSess)
+	if err != nil {
+		ctxSess.Lv4()
+		httpCode, errMsg := errHandler(err)
+		return httpError(c, httpCode, errors.New(errMsg))
+	}
+
+	ctxSess.Lv4(resp)
+	return c.JSON(http.StatusOK, resp)
 }
 
 func (s *userHandler) registerUser(c echo.Context) error {

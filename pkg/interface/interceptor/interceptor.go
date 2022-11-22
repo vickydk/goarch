@@ -57,7 +57,8 @@ func (interceptor *Interceptor) isHealthCheck(c echo.Context) bool {
 }
 
 func (interceptor *Interceptor) skipCheckSession(c echo.Context) bool {
-	if strings.HasPrefix(c.Request().URL.String(), "/api/v1/login") {
+	if strings.HasPrefix(c.Request().URL.String(), "/api/v1/login") ||
+		strings.HasPrefix(c.Request().URL.String(), "/api/v1/public") {
 		return true
 	}
 	return false
@@ -86,7 +87,6 @@ func (interceptor *Interceptor) checkSession(c echo.Context) bool {
 				AccountID: claimsToken.AccountID,
 				Email:     claimsToken.Email,
 				Name:      claimsToken.Name,
-				Role:      claimsToken.Role,
 			}
 			ctxSess.UserSession = user
 			return true

@@ -18,7 +18,11 @@ func SetupRouter(server *echo.Echo, handler *Handler) {
 	root := server.Group("/api/v1")
 	root.POST("/login", handler.authHandler.login)
 
+	public := root.Group("/public")
+	public.GET("/user/:id", handler.userHandler.getUserDetailAPI)
+
 	user := root.Group("/user")
+	user.GET("", handler.userHandler.getUserDetail)
 	user.POST("", handler.userHandler.registerUser)
 	user.PATCH("/update/name", handler.userHandler.updateName)
 	user.PATCH("/update/pass", handler.userHandler.updatePassword)
