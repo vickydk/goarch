@@ -54,3 +54,11 @@ Call this url: `http://localhost:8811/`, if you see response `OK` so the applica
 #### Compile Proto
 1. go to folder `pkg/shared/grpc`
 2. run this command to compile the proto file `./protoc.sh -p {protofile_name_without.dot.proto`, for example `./protoc.sh -p user`
+
+## License
+
+gorsk is licensed under the MIT license. Check the [LICENSE](LICENSE) file for details.
+
+## Author
+
+[VickyDk](https://github.com/vickydk)
