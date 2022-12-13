@@ -21,7 +21,7 @@ func setupMiddleware(server *echo.Echo, cfg *config.Config) {
 
 			ctxSess := context.New(logger.GetLogger()).
 				SetXRequestID(reqId).
-				SetAppName("clerked.API").
+				SetAppName("goarch.API").
 				SetAppVersion("0.0").
 				SetPort(cfg.Apps.HttpPort).
 				SetSrcIP(c.RealIP()).
