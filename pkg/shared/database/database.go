@@ -12,7 +12,7 @@ type Database struct {
 	*gorm.DB
 }
 
-func New(config ConfigDatabase) *Database {
+func New(config ConfigDatabase) (*Database, error) {
 	fmt.Println("Try NewDatabase ...")
 
 	db, err := gorm.Open("postgres",
@@ -26,7 +26,7 @@ func New(config ConfigDatabase) *Database {
 
 	if err != nil {
 		fmt.Println("failed to connect database")
-		panic(err)
+		return nil, err
 	}
 
 	db.SingularTable(false)
@@ -34,7 +34,7 @@ func New(config ConfigDatabase) *Database {
 	err = db.DB().Ping()
 	if err != nil {
 		fmt.Println("failed to connect database")
-		panic(err)
+		return nil, err
 	}
 
 	db.DB().SetMaxIdleConns(config.MinIdleConnections)
@@ -49,10 +49,10 @@ func New(config ConfigDatabase) *Database {
 
 	if err = s.MigrateUP("./migration"); err != nil {
 		fmt.Println("failed to migrate database")
-		panic(err)
+		return nil, err
 	}
 
-	return s
+	return s, nil
 }
 
 func (s *Database) MigrateUP(path string) error {

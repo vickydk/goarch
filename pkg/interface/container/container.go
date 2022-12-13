@@ -24,8 +24,11 @@ func Setup() *Container {
 	cfg := config.NewConfig("./resources/config.json")
 
 	// ====== Construct Database
-	dbMaster := Database.New(cfg.Database.Master)
-	dbSlave := Database.New(cfg.Database.Slave)
+	dbMaster, err := Database.New(cfg.Database.Master)
+	if err != nil {
+		panic(err)
+	}
+	dbSlave, _ := Database.New(cfg.Database.Slave)
 	if dbSlave == nil {
 		dbSlave = dbMaster
 	}
