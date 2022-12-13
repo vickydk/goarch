@@ -50,7 +50,7 @@ func (interceptor *Interceptor) ValidateAccess() echo.MiddlewareFunc {
 }
 
 func (interceptor *Interceptor) isHealthCheck(c echo.Context) bool {
-	if c.Request().URL.String() == "/health" {
+	if c.Request().URL.String() == "/" || c.Request().URL.String() == "/ping" {
 		return true
 	}
 	return false
