@@ -26,6 +26,9 @@ func Setup() *Container {
 	// ====== Construct Database
 	dbMaster := Database.New(cfg.Database.Master)
 	dbSlave := Database.New(cfg.Database.Slave)
+	if dbSlave == nil {
+		dbSlave = dbMaster
+	}
 
 	userRepo := gorm.UserSetup(dbMaster, dbSlave)
 

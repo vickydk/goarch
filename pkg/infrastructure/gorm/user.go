@@ -22,7 +22,7 @@ func UserSetup(dbMaster *database.Database, dbSlave *database.Database) *reposit
 		panic("please provide db master")
 	}
 	if r.dbSlave == nil {
-		r.dbSlave = r.dbMaster
+		panic("please provide db slave")
 	}
 	return r
 }
