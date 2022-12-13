@@ -24,9 +24,10 @@ func Setup() *Container {
 	cfg := config.NewConfig("./resources/config.json")
 
 	// ====== Construct Database
-	db := Database.New(cfg.Database)
+	dbMaster := Database.New(cfg.Database.Master)
+	dbSlave := Database.New(cfg.Database.Slave)
 
-	userRepo := gorm.UserSetup(db)
+	userRepo := gorm.UserSetup(dbMaster, dbSlave)
 
 	crudUserWrapper := goarch.SetupCrudUserWrapper(&cfg.GoarchGrpc)
 	goArchAPIWrapper := goarchApi.NewWrapper(&cfg.GoarchAPIConfig)

@@ -11,10 +11,10 @@ import (
 )
 
 type Config struct {
-	Apps            Apps                    `json:"apps"`
-	GoarchGrpc      GoarchConfig            `json:"goarchGrpc"`
-	Database        Database.ConfigDatabase `json:"database"`
-	GoarchAPIConfig GoarchAPIConfig         `json:"goarchAPIConfig"`
+	Apps            Apps            `json:"apps"`
+	GoarchGrpc      GoarchConfig    `json:"goarchGrpc"`
+	Database        DB              `json:"database"`
+	GoarchAPIConfig GoarchAPIConfig `json:"goarchAPIConfig"`
 }
 
 type Apps struct {
@@ -22,6 +22,11 @@ type Apps struct {
 	HttpPort int    `json:"httpPort"`
 	GRPCPort int    `json:"grpcPort"`
 	Version  string `json:"version"`
+}
+
+type DB struct {
+	Master Database.ConfigDatabase `json:"master"`
+	Slave  Database.ConfigDatabase `json:"slave"`
 }
 
 type GoarchConfig struct {

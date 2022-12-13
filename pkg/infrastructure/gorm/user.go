@@ -12,20 +12,24 @@ import (
 )
 
 type repository struct {
-	db *database.Database
+	dbMaster *database.Database
+	dbSlave  *database.Database
 }
 
-func UserSetup(database *database.Database) *repository {
-	r := &repository{db: database}
-	if r.db == nil {
-		panic("please provide db")
+func UserSetup(dbMaster *database.Database, dbSlave *database.Database) *repository {
+	r := &repository{dbMaster: dbMaster, dbSlave: dbSlave}
+	if r.dbMaster == nil {
+		panic("please provide db master")
+	}
+	if r.dbSlave == nil {
+		r.dbSlave = r.dbMaster
 	}
 	return r
 }
 
 func (r *repository) Save(entity *domainUser.Entity) (err error) {
 	entity.UpdatedAt = time.Now()
-	err = r.db.Save(entity).Error
+	err = r.dbMaster.Save(entity).Error
 	if err != nil {
 		return
 	}
@@ -34,7 +38,7 @@ func (r *repository) Save(entity *domainUser.Entity) (err error) {
 }
 
 func (r *repository) FindByEmail(email string) (entity domainUser.Entity, err error) {
-	err = r.db.
+	err = r.dbSlave.
 		Where("email = ?", email).
 		First(&entity).
 		Error
@@ -51,7 +55,7 @@ func (r *repository) FindByEmail(email string) (entity domainUser.Entity, err er
 }
 
 func (r *repository) FindById(id int64) (entity domainUser.Entity, err error) {
-	err = r.db.
+	err = r.dbSlave.
 		Where("id = ?", id).
 		First(&entity).
 		Error
